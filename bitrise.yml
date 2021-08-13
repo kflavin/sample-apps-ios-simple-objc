@@ -37,7 +37,9 @@ workflows:
     - script@1.1.6:
         title: Do anything with Script step
         inputs:
-        - content: echo "version = ${VERSION}!"
+        - content: |-
+            echo "version = ${VERSION}!"
+            echo CI = $CI
     - certificate-and-profile-installer@1: {}
     - xcode-test@3:
         inputs:
@@ -45,6 +47,36 @@ workflows:
         - scheme: "$BITRISE_SCHEME"
     - deploy-to-bitrise-io@1: {}
     - cache-push@2: {}
+  test1:
+    envs:
+      - WORKFLOW1: hello
+    steps:
+    - script:
+        title: test1
+        inputs:
+        - content: |-
+            #!/bin/bash
+            echo "test1" $WORKFLOW1 world
+            echo "test1" $YAY
+            envman add --key YAY --value "deyar, I'm a pirate"
+  test2:
+    before_run:
+      - test1
+    steps:
+    - script:
+        title: test2
+        inputs:
+        - content: |-
+            echo "test2" $WORKFLOW1 world
+            echo "test2" $YAY
+
+  build_release_condidate:
+    steps:
+    - script:
+        title: Echo output
+        inputs:
+        - content: |-
+            echo Build Release Candidate
 app:
   envs:
   - opts:
@@ -56,5 +88,13 @@ app:
   - opts:
       is_expand: false
     BITRISE_EXPORT_METHOD: development
+  - opts:
+      is_expand: false
+    PRODUCTION_BRANCH: rel-1-0-0
   - VERSION: $APP_VERSION
 
+trigger_map:
+- push_branch: $PRODUCTION_BRANCH
+  workflow: test2
+- push_branch: 'rel-${RELEASE_TAG}'
+  workflow: build-release-candidate
