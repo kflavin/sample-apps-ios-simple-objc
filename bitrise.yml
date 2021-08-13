@@ -70,10 +70,17 @@ workflows:
             echo "test2" $WORKFLOW1 world
             echo "test2" $YAY
 
-  build_release_condidate:
+  master:
     steps:
     - script:
-        title: Echo output
+        title: Build master
+        inputs:
+        - content: |-
+            echo Build Master Candidate
+  release:
+    steps:
+    - script:
+        title: Build release
         inputs:
         - content: |-
             echo Build Release Candidate
@@ -96,5 +103,10 @@ app:
 trigger_map:
 - push_branch: $PRODUCTION_BRANCH
   workflow: test2
-- push_branch: 'rel-${RELEASE_TAG}'
-  workflow: build-release-candidate
+- push_branch: $PRODUCTION_BRANCH
+  workflow: test2
+- push_branch: master
+  workflow: master
+- push_branch: 'rel-*'
+  workflow: release
+
