@@ -97,7 +97,7 @@ app:
     BITRISE_EXPORT_METHOD: development
   - opts:
       is_expand: false
-    PRODUCTION_BRANCH: rel-1-0-4
+    PRODUCTION_BRANCH: rel-1-0-5
   - VERSION: $APP_VERSION
 
 trigger_map:
