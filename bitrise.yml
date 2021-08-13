@@ -67,3 +67,7 @@ workflows:
         - BITRISE_DSYM_PATH:
           opts:
             title: The created .dSYM.zip file's path
+    - script@1.1.6:
+        title: 'Run some scripty stuff'
+        inputs:
+        - content: echo "version = ${VERSION}!"
