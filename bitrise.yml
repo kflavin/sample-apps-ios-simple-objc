@@ -103,8 +103,6 @@ app:
 trigger_map:
 - push_branch: $PRODUCTION_BRANCH
   workflow: test2
-- push_branch: $PRODUCTION_BRANCH
-  workflow: test2
 - push_branch: master
   workflow: master
 - push_branch: 'rel-*'
