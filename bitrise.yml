@@ -105,6 +105,4 @@ trigger_map:
   workflow: test2
 - push_branch: master
   workflow: master
-- push_branch: 'rel-*'
-  workflow: release
 
