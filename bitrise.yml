@@ -34,10 +34,13 @@ workflows:
         title: setup
         inputs:
         - contents: |-
-            set -x
             RELEASE_NAME="$(echo $NEXT_PRODUCTION_VERSION | tr '.' '-')"
             BRANCH_NAME="rel-$(echo $RELEASE_NAME)"
             GRAPHQL_URL="https://api-production-mobile-${RELEASE_NAME}.rxvantage.com"
+            echo RELEASE_NAME=$RELEASE_NAME
+            echo BRANCH_NAME=$BRANCH_NAME
+            echo GRAPHQL_URL=$GRAPHQL_URL
+            echo NEXT_PRODUCTION_VERSION=$NEXT_PRODUCTION_VERSION
             envman add --key RELEASE_NAME --value "$RELEASE_NAME"
             envman add --key BRANCH_NAME --value "$BRANCH_NAME"
             envman add --key GRAPHQL_URL --value "$GRAPHQL_URL"
