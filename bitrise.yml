@@ -119,12 +119,10 @@ app:
     BITRISE_EXPORT_METHOD: development
   - opts:
       is_expand: false
-    PRODUCTION_BRANCH: rel-1-0-5
+    NEXT_PRODUCTION_VERSION: 1.0.0
   - VERSION: $APP_VERSION
 
 trigger_map:
-- push_branch: $PRODUCTION_BRANCH
-  workflow: test2
 - push_branch: master
   workflow: master
 - push_branch: 'rel-*'
