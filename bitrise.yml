@@ -34,6 +34,7 @@ workflows:
         title: setup
         inputs:
         - contents: |-
+            set -x
             RELEASE_NAME="$(echo $NEXT_PRODUCTION_VERSION | tr '.' '-')"
             BRANCH_NAME="rel-$(echo $RELEASE_NAME)"
             GRAPHQL_URL="https://api-production-mobile-${RELEASE_NAME}.rxvantage.com"
