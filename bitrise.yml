@@ -28,6 +28,18 @@ workflows:
         - export_method: "$BITRISE_EXPORT_METHOD"
     - deploy-to-bitrise-io@1: {}
     - cache-push@2: {}
+  setup:
+    steps:
+    - script: 
+        title: setup
+        inputs:
+        - contents: |-
+            RELEASE_NAME="$(echo $NEXT_PRODUCTION_VERSION | tr '.' '-')"
+            BRANCH_NAME="rel-$(echo $RELEASE_NAME)"
+            GRAPHQL_URL="https://api-production-mobile-${RELEASE_NAME}.rxvantage.com"
+            envman add --key RELEASE_NAME --value "$RELEASE_NAME"
+            envman add --key BRANCH_NAME --value "$BRANCH_NAME"
+            envman add --key GRAPHQL_URL --value "$GRAPHQL_URL"
   primary:
     steps:
     - activate-ssh-key@4:
@@ -71,19 +83,29 @@ workflows:
             echo "test2" $YAY
 
   master:
+    before_run:
+    - setup
     steps:
     - script:
         title: Build master
         inputs:
         - content: |-
-            echo Build Master Candidate
+            echo Build Master
+            echo RELEASE_NAME=$RELEASE_NAME
+            echo BRANCH_NAME=$BRANCH_NAME
+            echo GRAPHQL_URL=$GRAPHQL_URL
   release:
+    before_run:
+    - setup
     steps:
     - script:
         title: Build release
         inputs:
         - content: |-
             echo Build Release Candidate
+            echo RELEASE_NAME=$RELEASE_NAME
+            echo BRANCH_NAME=$BRANCH_NAME
+            echo GRAPHQL_URL=$GRAPHQL_URL
 app:
   envs:
   - opts:
@@ -105,4 +127,6 @@ trigger_map:
   workflow: test2
 - push_branch: master
   workflow: master
+- push_branch: 'rel-*'
+  workflow: release
 
