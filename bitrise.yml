@@ -110,6 +110,18 @@ workflows:
             echo RELEASE_NAME=$RELEASE_NAME
             echo BRANCH_NAME=$BRANCH_NAME
             echo GRAPHQL_URL=$GRAPHQL_URL
+  feature:
+    before_run:
+    - setup
+    steps:
+    - script:
+        title: Build feature
+        inputs:
+        - content: |-
+            echo Build Release Candidate
+            echo RELEASE_NAME=$RELEASE_NAME
+            echo BRANCH_NAME=$BRANCH_NAME
+            echo GRAPHQL_URL=$GRAPHQL_URL
 app:
   envs:
   - opts:
@@ -131,4 +143,6 @@ trigger_map:
   workflow: master
 - push_branch: 'rel-*'
   workflow: release
+- push_branch: 'feat-*'
+  workflow: feature
 
